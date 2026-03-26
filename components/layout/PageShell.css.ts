@@ -1,0 +1,26 @@
+import { style } from "@vanilla-extract/css";
+import { vars } from "@/styles/theme.css";
+
+export const page = style({
+  minHeight: "100vh",
+  position: "relative",
+});
+
+export const backgroundAccent = style({
+  background:
+    "radial-gradient(circle at top left, rgba(14, 159, 110, 0.14), transparent 28%), radial-gradient(circle at top right, rgba(216, 243, 232, 0.9), transparent 32%)",
+  inset: 0,
+  pointerEvents: "none",
+  position: "absolute",
+});
+
+export const container = style({
+  margin: "0 auto",
+  maxWidth: "1240px",
+  padding: "0 1rem",
+  position: "relative",
+});
+
+export const main = style({
+  minHeight: "calc(100vh - 220px)",
+});

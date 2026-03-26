@@ -1,0 +1,26 @@
+---
+title: "Backend Notes for Scalable Services"
+description: "실무에서 반복적으로 마주치는 확장성 이슈를 어떤 관점으로 정리하는지에 대한 메모입니다."
+publishedAt: "2026-03-20"
+tags:
+  - backend
+  - architecture
+  - notes
+---
+
+확장성은 트래픽이 늘어난 뒤에만 필요한 주제가 아니다.
+
+초기 구조에서도 도메인 경계를 분명히 하고, 읽기 쉬운 코드와 관측 가능한 흐름을 먼저 확보해야 한다.
+
+## What I Optimize First
+
+- 예측 가능한 폴더 구조
+- 명확한 데이터 흐름
+- 로깅과 에러 처리 기준
+- 기능 경계가 드러나는 이름
+
+## A Practical Rule
+
+서비스는 결국 여러 결정의 누적이므로, 한 번에 거대한 구조를 도입하기보다 작은 기준을 꾸준히 지키는 편이 더 강하다.
+
+> Small architectural rules tend to scale better than ambitious rewrites.
