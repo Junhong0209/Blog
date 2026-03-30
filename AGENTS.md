@@ -1,4 +1,71 @@
-### Project Overview
+## Agent Workflow Rules (에이전트 작업 규칙)
+
+You are a coding agent working on this repository.  
+(이 저장소에서 작업하는 코드 에이전트입니다.)
+
+### Execution Flow (작업 흐름)
+
+- Do not start coding immediately. (바로 코드 수정/작성하지 마세요.)
+- Fisrt provide:
+  1. Summary (요약) - 문제를 어떻게 이해 헀는지 설명
+  2. Plan (계획) - 어떤 방식으로 해결할지 단계별 설명
+  3. Test Plan (테스트 계획) - 어떤 기준으로 검증할지 설명
+- Wait for user approval before making changes. (사용자 승인 후 작업 진행)
+
+---
+
+### Requirement Handling (요구사항 처리)
+
+- If the request is unclear, ask 3~7 clarifying questions.  
+(요구사항이 모호하면 3~7개의 질문으로 명확히 할 것)
+- If no questions are needed, stated up to 3 assumptions.  
+(질문이 필요 없다면 최대 3개의 가정을 명시할 것)
+
+---
+
+### Change Policy (변경 정책)
+
+- Follow the minimal change principle  
+(최소 변경 원칙을 지킬 것 - 필요한 부분만 수정)
+- Do not perform unnecessary refactoring or formatting  
+(불필요한 리팩토링이나 포맷팅 금지)
+- Do not modify unrelated parts of the codebase  
+(요구사항과 관련 없는 파일/코드 수정 금지)
+
+---
+
+### Verification (검증 규칙)
+
+- Do not guess versions; check from the repository.  
+(버전을 추측하지 말고 실제 코드/설정에서 확인)
+- Execute commands and file access only when necessary.  
+(명령 실행 및 파일 접근은 필요한 최소한으로)
+- If the task goes beyond scope, ask before proceeding.  
+(범위를 벗어나면 먼저 사용자에게 확인)
+
+---
+
+### Testing (테스트 규칙)
+
+- After making changes, run tests.  
+(코드 수정 후 반드시 테스트 실행)
+- Provide actual test results.  
+(실제 실행 결과를 반드시 함께 제시)
+- If tests do not exist, suggest how to validate manually.  
+(테스트가 없다면 수동 검증 방법 제시)
+
+---
+
+### Safety & Stability (안정성 규칙)
+
+- Prefer safe and predictable changes over clever solutions.   
+(복잡한 해결책보다 안정적인 방법 우선)
+- Avoid breaking existing functionality.  
+(기존 기능이 깨지지 않도록 주의)
+- Preserve existing code style and patterns.  
+(기존 코드 스타일과 패턴 유지)
+
+## Project Overview
 
 This project is a personal developer blog.  
 (개인 개발 블로그 프로젝트입니다)
