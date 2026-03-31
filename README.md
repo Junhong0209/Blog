@@ -2,6 +2,14 @@
 
 Personal developer blog built with Next.js App Router, TypeScript, Vanilla Extract, and MDX.
 
+## New Post
+
+```bash
+npm run new:post -- my-new-post
+```
+
+This creates `content/posts/my-new-post.mdx` with the default frontmatter template.
+
 ## Stack
 
 - Next.js

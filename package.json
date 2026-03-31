@@ -7,7 +7,8 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit --project tsconfig.typecheck.json"
+    "typecheck": "tsc --noEmit --project tsconfig.typecheck.json",
+    "new:post": "node ./scripts/new-post.mjs"
   },
   "dependencies": {
     "@vanilla-extract/css": "^1.17.1",
