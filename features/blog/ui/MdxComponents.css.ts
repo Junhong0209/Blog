@@ -1,4 +1,4 @@
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 import { vars } from "@/styles/theme.css";
 
 export const heading = style({
@@ -56,4 +56,34 @@ export const blockquote = style({
   color: vars.color.textMuted,
   margin: "1.5rem 0",
   paddingLeft: "1rem",
+});
+
+globalStyle(`${preformatted} code.hljs`, {
+  background: "transparent",
+  color: "#f8f8f2",
+  display: "block",
+});
+
+globalStyle(`${preformatted} .hljs-comment`, {
+  color: "#8b949e",
+});
+
+globalStyle(`${preformatted} .hljs-keyword`, {
+  color: "#ff7b72",
+});
+
+globalStyle(`${preformatted} .hljs-title`, {
+  color: "#d2a8ff",
+});
+
+globalStyle(`${preformatted} .hljs-string`, {
+  color: "#a5d6ff",
+});
+
+globalStyle(`${preformatted} .hljs-number`, {
+  color: "#79c0ff",
+});
+
+globalStyle(`${preformatted} .hljs-built_in`, {
+  color: "#ffa657",
 });
