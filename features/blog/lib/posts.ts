@@ -26,7 +26,7 @@ const getPostFilePath = (slug: string): string => {
   return path.join(postsDirectory, `${slug}.mdx`);
 };
 
-export const getAllPosts = async (): Promise<PostSummary[]> => {
+const readAndSortPosts = async (): Promise<PostSummary[]> => {
   const fileNames = await readPostFileNames();
 
   const posts = await Promise.all(
@@ -48,6 +48,24 @@ export const getAllPosts = async (): Promise<PostSummary[]> => {
       new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime()
     );
   });
+};
+
+export const getAllPosts = async (): Promise<PostSummary[]> => {
+  return readAndSortPosts();
+};
+
+export const getPaginatedPosts = async (
+  offset: number,
+  limit: number,
+): Promise<{ posts: PostSummary[]; total: number }> => {
+  const safeOffset = Math.max(0, offset);
+  const safeLimit = Math.max(1, limit);
+  const allPosts = await readAndSortPosts();
+
+  return {
+    posts: allPosts.slice(safeOffset, safeOffset + safeLimit),
+    total: allPosts.length,
+  };
 };
 
 export const getPostBySlug = async (
