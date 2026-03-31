@@ -39,3 +39,25 @@ git add .
 git commit -m "Initial commit"
 git push -u origin main
 ```
+
+## Branch Strategy
+
+- `main`: production-ready branch
+- `dev`: integration branch for reviewed changes
+- `feature/*`: working branches created from `dev`
+
+Recommended flow:
+
+```bash
+git switch dev
+git pull origin dev
+git switch -c feature/my-change
+
+# work, commit, push
+git push -u origin feature/my-change
+```
+
+Then merge in this order:
+
+1. `feature/*` -> `dev`
+2. `dev` -> `main`

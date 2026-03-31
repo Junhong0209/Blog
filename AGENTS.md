@@ -65,6 +65,21 @@ You are a coding agent working on this repository.
 - Preserve existing code style and patterns.  
 (기존 코드 스타일과 패턴 유지)
 
+---
+
+### Git Branch Workflow (브랜치 워크플로우)
+
+- Do not create feature branches from `main`.  
+(feature 브랜치를 `main`에서 직접 만들지 말 것)
+- Use `dev` as the integration branch.  
+(`dev` 브랜치를 중간 통합 브랜치로 사용할 것)
+- Create new working branches from `dev`.  
+(새 작업 브랜치는 `dev`에서 생성할 것)
+- Merge order must be `feature/*` -> `dev` -> `main`.  
+(머지 순서는 반드시 `feature/*` -> `dev` -> `main`)
+- Avoid direct commits or direct PR merges into `main` unless explicitly requested.  
+(명시적 요청 없이는 `main`에 직접 커밋하거나 바로 PR 머지하지 말 것)
+
 ## Project Overview
 
 This project is a personal developer blog.  
