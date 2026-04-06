@@ -35,6 +35,7 @@ export const PostInfiniteList = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(initialPosts.length < total);
   const [hasError, setHasError] = useState<boolean>(false);
+  const [hasLoadedMore, setHasLoadedMore] = useState<boolean>(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const isFetchingRef = useRef<boolean>(false);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -77,8 +78,13 @@ export const PostInfiniteList = ({
 
         if (replace) {
           setPosts(data.posts);
+          setHasLoadedMore(false);
         } else {
           setPosts((previousPosts) => [...previousPosts, ...data.posts]);
+
+          if (nextOffset > 0 && data.posts.length > 0) {
+            setHasLoadedMore(true);
+          }
         }
 
         setOffset(data.nextOffset);
@@ -191,7 +197,7 @@ export const PostInfiniteList = ({
         <div className={styles.statusText}>목록을 불러오지 못했습니다. 스크롤을 다시 시도해 주세요.</div>
       ) : null}
       {isLoading ? <div className={styles.statusText}>글을 불러오는 중입니다...</div> : null}
-      {!hasMore && posts.length > 0 ? (
+      {!hasMore && posts.length > 0 && hasLoadedMore ? (
         <div className={styles.statusText}>모든 글을 불러왔습니다.</div>
       ) : null}
       <div className={styles.sentinel} ref={sentinelRef} aria-hidden />
