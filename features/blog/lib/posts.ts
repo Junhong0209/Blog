@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 import { compileMDX } from "next-mdx-remote/rsc";
-import rehypeHighlight from "rehype-highlight";
+import rehypePrettyCode from "rehype-pretty-code";
 import { z } from "zod";
 import type { ReactElement } from "react";
 import type { PostFrontmatter, PostSummary } from "@/shared/types/post.type";
@@ -81,7 +81,14 @@ export const getPostBySlug = async (
       options: {
         parseFrontmatter: false,
         mdxOptions: {
-          rehypePlugins: [rehypeHighlight],
+          rehypePlugins: [
+            [
+              rehypePrettyCode,
+              {
+                theme: "github-dark",
+              },
+            ],
+          ],
         },
       },
       components: mdxComponents,

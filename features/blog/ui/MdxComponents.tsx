@@ -1,5 +1,6 @@
 import type { MDXComponents } from "mdx/types";
 import * as styles from "./MdxComponents.css";
+import { CodeBlock } from "./CodeBlock";
 
 const mergeClassNames = (...classNames: Array<string | undefined>): string => {
   return classNames.filter(Boolean).join(" ");
@@ -15,7 +16,9 @@ export const mdxComponents: MDXComponents = {
   a: (props) => <a className={styles.link} {...props} />,
   code: ({ className, ...props }) => {
     const isCodeBlock =
-      className?.includes("language-") === true || className?.includes("hljs") === true;
+      "data-language" in props ||
+      className?.includes("language-") === true ||
+      className?.includes("hljs") === true;
 
     return (
       <code
@@ -26,6 +29,8 @@ export const mdxComponents: MDXComponents = {
       />
     );
   },
-  pre: (props) => <pre className={styles.preformatted} {...props} />,
+  pre: ({ className, ...props }) => (
+    <CodeBlock className={mergeClassNames(styles.preformatted, className)} {...props} />
+  ),
   blockquote: (props) => <blockquote className={styles.blockquote} {...props} />,
 };

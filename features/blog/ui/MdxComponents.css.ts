@@ -46,7 +46,7 @@ export const preformatted = style({
   background: "#201a15",
   borderRadius: vars.radius.md,
   color: "#f7f2ea",
-  margin: "1.5rem 0",
+  margin: 0,
   overflowX: "auto",
   padding: "1.25rem",
 });
@@ -58,32 +58,25 @@ export const blockquote = style({
   paddingLeft: "1rem",
 });
 
-globalStyle(`${preformatted} code.hljs`, {
-  background: "transparent",
-  color: "#f8f8f2",
+globalStyle(`${preformatted} > code`, {
   display: "block",
 });
 
-globalStyle(`${preformatted} .hljs-comment`, {
-  color: "#8b949e",
+globalStyle(`${preformatted} pre[data-language]`, {
+  background: "transparent !important",
+  margin: 0,
+  padding: 0,
 });
 
-globalStyle(`${preformatted} .hljs-keyword`, {
-  color: "#ff7b72",
+globalStyle(`${preformatted} pre[data-language] code`, {
+  background: "transparent !important",
+  borderRadius: 0,
+  color: "inherit",
+  display: "grid",
+  padding: 0,
 });
 
-globalStyle(`${preformatted} .hljs-title`, {
-  color: "#d2a8ff",
-});
-
-globalStyle(`${preformatted} .hljs-string`, {
-  color: "#a5d6ff",
-});
-
-globalStyle(`${preformatted} .hljs-number`, {
-  color: "#79c0ff",
-});
-
-globalStyle(`${preformatted} .hljs-built_in`, {
-  color: "#ffa657",
+globalStyle(`${preformatted} pre[data-language] .line`, {
+  display: "block",
+  minHeight: "1.5rem",
 });
