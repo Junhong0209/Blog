@@ -15,7 +15,9 @@ export const mdxComponents: MDXComponents = {
   a: (props) => <a className={styles.link} {...props} />,
   code: ({ className, ...props }) => {
     const isCodeBlock =
-      className?.includes("language-") === true || className?.includes("hljs") === true;
+      "data-language" in props ||
+      className?.includes("language-") === true ||
+      className?.includes("hljs") === true;
 
     return (
       <code
