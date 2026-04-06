@@ -12,11 +12,12 @@ export async function GET(request: Request) {
     searchParams.get("limit") ?? `${DEFAULT_LIMIT}`,
     10,
   );
+  const query = searchParams.get("q") ?? "";
 
   const offset = Number.isFinite(offsetParam) ? Math.max(0, offsetParam) : 0;
   const limit = Number.isFinite(limitParam) ? Math.max(1, limitParam) : DEFAULT_LIMIT;
 
-  const { posts, total } = await getPaginatedPosts(offset, limit);
+  const { posts, total } = await getPaginatedPosts(offset, limit, query);
 
   return NextResponse.json({
     posts,

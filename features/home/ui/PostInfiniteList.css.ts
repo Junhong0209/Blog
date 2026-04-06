@@ -12,6 +12,21 @@ export const postGrid = style({
   },
 });
 
+export const searchFieldWrapper = style({
+  marginBottom: "1rem",
+});
+
+export const searchInput = style({
+  width: "100%",
+  fontSize: "0.95rem",
+  lineHeight: 1.4,
+  padding: "0.65rem 0.8rem",
+  border: `1px solid ${vars.color.border}`,
+  borderRadius: "0.5rem",
+  color: vars.color.text,
+  backgroundColor: vars.color.background,
+});
+
 export const statusText = style({
   color: vars.color.textMuted,
   fontSize: "0.9rem",

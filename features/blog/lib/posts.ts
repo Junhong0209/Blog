@@ -58,14 +58,22 @@ export const getAllPosts = async (): Promise<PostSummary[]> => {
 export const getPaginatedPosts = async (
   offset: number,
   limit: number,
+  query?: string,
 ): Promise<{ posts: PostSummary[]; total: number }> => {
   const safeOffset = Math.max(0, offset);
   const safeLimit = Math.max(1, limit);
   const allPosts = await readAndSortPosts();
+  const normalizedQuery = query?.trim().toLocaleLowerCase() ?? "";
+  const filteredPosts =
+    normalizedQuery.length > 0
+      ? allPosts.filter((post) => {
+          return post.title.toLocaleLowerCase().includes(normalizedQuery);
+        })
+      : allPosts;
 
   return {
-    posts: allPosts.slice(safeOffset, safeOffset + safeLimit),
-    total: allPosts.length,
+    posts: filteredPosts.slice(safeOffset, safeOffset + safeLimit),
+    total: filteredPosts.length,
   };
 };
 

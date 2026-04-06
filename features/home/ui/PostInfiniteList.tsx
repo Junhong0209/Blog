@@ -18,11 +18,18 @@ type PostsApiResponse = {
   nextOffset: number;
 };
 
+type FetchPageParams = {
+  nextOffset: number;
+  searchTerm: string;
+  replace: boolean;
+};
+
 export const PostInfiniteList = ({
   initialPosts,
   total,
   pageSize,
 }: PostInfiniteListProps) => {
+  const [query, setQuery] = useState<string>("");
   const [posts, setPosts] = useState<PostSummary[]>(initialPosts);
   const [offset, setOffset] = useState<number>(initialPosts.length);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -30,35 +37,108 @@ export const PostInfiniteList = ({
   const [hasError, setHasError] = useState<boolean>(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const isFetchingRef = useRef<boolean>(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const isFirstRenderRef = useRef<boolean>(true);
+
+  const fetchPage = useCallback(
+    async ({ nextOffset, searchTerm, replace }: FetchPageParams) => {
+      if (isFetchingRef.current) {
+        return;
+      }
+
+      isFetchingRef.current = true;
+      setIsLoading(true);
+      setHasError(false);
+
+      const searchParams = new URLSearchParams({
+        offset: `${nextOffset}`,
+        limit: `${pageSize}`,
+      });
+
+      const normalizedSearchTerm = searchTerm.trim();
+
+      if (normalizedSearchTerm.length > 0) {
+        searchParams.set("q", normalizedSearchTerm);
+      }
+
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
+      try {
+        const response = await fetch(`/api/posts?${searchParams.toString()}`, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to load posts");
+        }
+
+        const data = (await response.json()) as PostsApiResponse;
+
+        if (replace) {
+          setPosts(data.posts);
+        } else {
+          setPosts((previousPosts) => [...previousPosts, ...data.posts]);
+        }
+
+        setOffset(data.nextOffset);
+        setHasMore(data.hasMore);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+
+        setHasError(true);
+      } finally {
+        if (abortControllerRef.current === controller) {
+          abortControllerRef.current = null;
+        }
+
+        isFetchingRef.current = false;
+        setIsLoading(false);
+      }
+    },
+    [pageSize],
+  );
 
   const loadMore = useCallback(async () => {
     if (!hasMore || isLoading || isFetchingRef.current) {
       return;
     }
 
-    isFetchingRef.current = true;
-    setIsLoading(true);
-    setHasError(false);
+    await fetchPage({
+      nextOffset: offset,
+      searchTerm: query,
+      replace: false,
+    });
+  }, [fetchPage, hasMore, isLoading, offset, query]);
 
-    try {
-      const response = await fetch(`/api/posts?offset=${offset}&limit=${pageSize}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to load posts");
-      }
-
-      const data = (await response.json()) as PostsApiResponse;
-
-      setPosts((previousPosts) => [...previousPosts, ...data.posts]);
-      setOffset(data.nextOffset);
-      setHasMore(data.hasMore);
-    } catch {
-      setHasError(true);
-    } finally {
-      isFetchingRef.current = false;
-      setIsLoading(false);
+  useEffect(() => {
+    if (isFirstRenderRef.current) {
+      isFirstRenderRef.current = false;
+      return;
     }
-  }, [hasMore, isLoading, offset, pageSize]);
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      isFetchingRef.current = false;
+    }
+
+    void fetchPage({
+      nextOffset: 0,
+      searchTerm: query,
+      replace: true,
+    });
+  }, [fetchPage, query]);
+
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const node = sentinelRef.current;
@@ -87,11 +167,26 @@ export const PostInfiniteList = ({
 
   return (
     <>
+      <div className={styles.searchFieldWrapper}>
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => {
+            setQuery(event.target.value);
+          }}
+          className={styles.searchInput}
+          placeholder="글 제목으로 검색"
+          aria-label="글 제목 검색"
+        />
+      </div>
       <div className={styles.postGrid}>
         {posts.map((post) => (
           <PostCard key={post.slug} post={post} />
         ))}
       </div>
+      {query.trim().length > 0 && posts.length === 0 && !isLoading && !hasError ? (
+        <div className={styles.statusText}>검색 결과가 없습니다.</div>
+      ) : null}
       {hasError ? (
         <div className={styles.statusText}>목록을 불러오지 못했습니다. 스크롤을 다시 시도해 주세요.</div>
       ) : null}
