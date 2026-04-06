@@ -8,6 +8,7 @@ export const wrapper = style({
 
 export const pre = style({
   margin: 0,
+  paddingTop: "3.1rem !important",
 });
 
 export const copyButton = style({
@@ -46,6 +47,20 @@ export const copyButton = style({
   },
 });
 
+export const languageBadge = style({
+  color: "rgba(251, 247, 240, 0.72)",
+  fontSize: "0.72rem",
+  fontWeight: 500,
+  left: "0.75rem",
+  letterSpacing: "0.06em",
+  lineHeight: 1,
+  padding: "0.15rem 0.1rem",
+  position: "absolute",
+  textTransform: "lowercase",
+  top: "0.75rem",
+  zIndex: 2,
+});
+
 const toastEnter = keyframes({
   "0%": {
     opacity: 0,
@@ -82,6 +97,12 @@ export const toast = style({
   position: "fixed",
   transform: "translateX(-50%)",
   zIndex: 20,
+});
+
+export const toastError = style({
+  background: "rgba(112, 28, 28, 0.95)",
+  border: "1px solid rgba(255, 193, 193, 0.45)",
+  color: "#fff1f1",
 });
 
 export const toastEnterMotion = style({
