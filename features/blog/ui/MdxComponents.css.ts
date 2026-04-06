@@ -46,7 +46,7 @@ export const preformatted = style({
   background: "#201a15",
   borderRadius: vars.radius.md,
   color: "#f7f2ea",
-  margin: "1.5rem 0",
+  margin: 0,
   overflowX: "auto",
   padding: "1.25rem",
 });

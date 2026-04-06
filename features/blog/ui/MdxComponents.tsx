@@ -1,5 +1,6 @@
 import type { MDXComponents } from "mdx/types";
 import * as styles from "./MdxComponents.css";
+import { CodeBlock } from "./CodeBlock";
 
 const mergeClassNames = (...classNames: Array<string | undefined>): string => {
   return classNames.filter(Boolean).join(" ");
@@ -28,6 +29,8 @@ export const mdxComponents: MDXComponents = {
       />
     );
   },
-  pre: (props) => <pre className={styles.preformatted} {...props} />,
+  pre: ({ className, ...props }) => (
+    <CodeBlock className={mergeClassNames(styles.preformatted, className)} {...props} />
+  ),
   blockquote: (props) => <blockquote className={styles.blockquote} {...props} />,
 };
