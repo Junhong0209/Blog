@@ -9,7 +9,7 @@ export const article = style({
 
 export const backLink = style({
   color: vars.color.accent,
-  display: "inline-block",
+  display: "block",
   marginBottom: "1.5rem",
 });
 
@@ -22,7 +22,7 @@ export const publishedAt = style({
 
 export const title = style({
   fontFamily: vars.font.display,
-  fontSize: "clamp(2.8rem, 6vw, 4.6rem)",
+  fontSize: "clamp(2rem, 6vw, 3.6rem)",
   lineHeight: 1,
   margin: "0 0 1rem",
 });
