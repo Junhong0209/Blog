@@ -1,32 +1,46 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { ComponentPropsWithoutRef } from "react";
+import { isValidElement } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import * as styles from "./CodeBlock.css";
 
 const mergeClassNames = (...classNames: Array<string | undefined>): string => {
   return classNames.filter(Boolean).join(" ");
 };
 
+const toLanguageToken = (value: string | null | undefined): string => {
+  if (!value) {
+    return "";
+  }
+
+  return value.match(/language-([A-Za-z0-9_-]+)/)?.[1]?.toLowerCase() ?? "";
+};
+
+const getLanguageFromChildren = (children: ReactNode): string => {
+  if (
+    !isValidElement<{
+      className?: string;
+      "data-language"?: string;
+    }>(children)
+  ) {
+    return "";
+  }
+
+  const childClassName = children.props.className ?? "";
+  const childDataLanguage = children.props["data-language"] ?? "";
+
+  return (childDataLanguage || toLanguageToken(childClassName)).toLowerCase();
+};
+
 export const CodeBlock = ({ className, children, ...props }: ComponentPropsWithoutRef<"pre">) => {
   const preRef = useRef<HTMLPreElement>(null);
   const [isCopied, setIsCopied] = useState(false);
-  const [language, setLanguage] = useState("");
   const [toastType, setToastType] = useState<"success" | "error">("success");
   const [toastPhase, setToastPhase] = useState<"hidden" | "enter" | "exit">("hidden");
   const hideTimeoutRef = useRef<number | null>(null);
   const removeTimeoutRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const codeElement = preRef.current?.querySelector("code");
-    if (!codeElement) {
-      return;
-    }
-
-    const dataLanguage = codeElement.getAttribute("data-language");
-    const classLanguage = codeElement.className.match(/language-([A-Za-z0-9_-]+)/)?.[1];
-    setLanguage((dataLanguage ?? classLanguage ?? "").toLowerCase());
-  }, []);
+  const language = toLanguageToken(className) || getLanguageFromChildren(children);
 
   useEffect(() => {
     return () => {

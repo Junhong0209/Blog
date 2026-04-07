@@ -6,7 +6,7 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit --project tsconfig.typecheck.json",
     "new:post": "node ./scripts/new-post.mjs",
     "mock:posts": "node ./scripts/generate-mock-posts.mjs"
@@ -27,6 +27,8 @@
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.2",
     "typescript": "^5.9.3"
   }
 }
