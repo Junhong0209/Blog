@@ -1,12 +1,14 @@
 import Link from "next/link";
 import type { ReactElement } from "react";
 import { formatDate } from "@/shared/utils/formatDate";
+import { PostComments } from "./PostComments";
 import * as styles from "./PostDetailPage.css";
 
 type PostDetailPageProps = {
   content: ReactElement;
   description: string;
   publishedAt: string;
+  slug: string;
   tags: string[];
   title: string;
 };
@@ -15,6 +17,7 @@ export const PostDetailPage = ({
   content,
   description,
   publishedAt,
+  slug,
   tags,
   title,
 }: PostDetailPageProps) => {
@@ -34,6 +37,7 @@ export const PostDetailPage = ({
         ))}
       </div>
       {content}
+      <PostComments slug={slug} />
     </article>
   );
 };
