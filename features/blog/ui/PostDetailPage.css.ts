@@ -5,12 +5,25 @@ export const article = style({
   margin: "0 auto",
   maxWidth: "820px",
   paddingTop: "1rem",
+  wordBreak: "break-word",
+  "@media": {
+    "screen and (max-width: 768px)": {
+      paddingTop: "0.35rem",
+    },
+  },
 });
 
 export const backLink = style({
   color: vars.color.accent,
   display: "block",
-  marginBottom: "1.5rem",
+  marginBottom: "1.2rem",
+  minHeight: "2.25rem",
+  selectors: {
+    "&:focus-visible": {
+      outline: `2px solid ${vars.color.accent}`,
+      outlineOffset: "2px",
+    },
+  },
 });
 
 export const publishedAt = style({
@@ -23,15 +36,20 @@ export const publishedAt = style({
 export const title = style({
   fontFamily: vars.font.display,
   fontSize: "clamp(2rem, 6vw, 3.6rem)",
-  lineHeight: 1,
+  lineHeight: 1.08,
   margin: "0 0 1rem",
+  "@media": {
+    "screen and (max-width: 768px)": {
+      marginBottom: "0.8rem",
+    },
+  },
 });
 
 export const description = style({
   color: vars.color.textMuted,
-  fontSize: "1.15rem",
-  lineHeight: 1.8,
-  margin: "0 0 2rem",
+  fontSize: "clamp(1rem, 4.5vw, 1.15rem)",
+  lineHeight: 1.65,
+  margin: "0 0 1.5rem",
 });
 
 export const tagList = style({
@@ -39,6 +57,11 @@ export const tagList = style({
   flexWrap: "wrap",
   gap: "0.5rem",
   marginBottom: "2.5rem",
+  "@media": {
+    "screen and (max-width: 768px)": {
+      marginBottom: "1.7rem",
+    },
+  },
 });
 
 export const tag = style({

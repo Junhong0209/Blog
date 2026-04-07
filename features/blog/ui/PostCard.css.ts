@@ -10,11 +10,23 @@ export const card = style({
   minHeight: "168px",
   padding: "1.4rem 1.5rem",
   transition: "transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease",
+  wordBreak: "break-word",
   selectors: {
     "&:hover": {
       borderColor: vars.color.accent,
       boxShadow: "0 16px 30px rgba(14, 159, 110, 0.12)",
       transform: "translateY(-2px)",
+    },
+    "&:focus-visible": {
+      borderColor: vars.color.accent,
+      boxShadow: "0 0 0 3px rgba(14, 159, 110, 0.18)",
+      transform: "none",
+    },
+  },
+  "@media": {
+    "screen and (max-width: 768px)": {
+      minHeight: "auto",
+      padding: "1.1rem 1rem",
     },
   },
 });
@@ -27,16 +39,17 @@ export const date = style({
 });
 
 export const title = style({
-  fontSize: "1.18rem",
+  fontSize: "clamp(1.03rem, 4.8vw, 1.18rem)",
   fontWeight: 600,
+  lineHeight: 1.35,
   margin: "0 0 0.5rem",
 });
 
 export const description = style({
   color: vars.color.textMuted,
-  fontSize: "0.95rem",
-  lineHeight: 1.6,
-  margin: "0 0 1rem",
+  fontSize: "clamp(0.9rem, 3.8vw, 0.95rem)",
+  lineHeight: 1.55,
+  margin: "0 0 0.9rem",
 });
 
 export const tagList = style({
