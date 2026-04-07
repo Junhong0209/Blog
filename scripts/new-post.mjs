@@ -4,7 +4,7 @@ import path from "node:path";
 const input = process.argv[2]?.trim();
 
 if (!input) {
-  console.error('Usage: npm run new:post -- "post-slug"');
+  console.error('Usage: npm run new:post -- "post title"');
   process.exit(1);
 }
 
@@ -20,9 +20,6 @@ if (!slug) {
   process.exit(1);
 }
 
-const postsDirectory = path.join(process.cwd(), "content", "posts");
-const postFilePath = path.join(postsDirectory, `${slug}.mdx`);
-
 const publishedAt = new Intl.DateTimeFormat("sv-SE", {
   timeZone: "Asia/Seoul",
   year: "numeric",
@@ -30,11 +27,9 @@ const publishedAt = new Intl.DateTimeFormat("sv-SE", {
   day: "2-digit",
 }).format(new Date());
 
-const title = slug
-  .split("-")
-  .filter(Boolean)
-  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-  .join(" ");
+const postsDirectory = path.join(process.cwd(), "content", "posts");
+const postFilePath = path.join(postsDirectory, `${publishedAt}-${slug}.mdx`);
+const title = input;
 
 const template = `---
 title: "${title || "Untitled Post"}"
