@@ -44,6 +44,7 @@ export default async function Page({ params }: PostPageProps) {
       content={post.content}
       description={post.description}
       publishedAt={post.publishedAt}
+      slug={slug}
       tags={post.tags}
       title={post.title}
     />
