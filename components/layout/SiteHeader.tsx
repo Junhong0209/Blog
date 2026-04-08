@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "./ThemeToggle";
 import * as styles from "./SiteHeader.css";
 
 const navigationItems = [
@@ -13,17 +14,20 @@ export const SiteHeader = () => {
       <Link className={styles.brand} href="/">
         junhong.dev
       </Link>
-      <nav>
-        <ul className={styles.navigation}>
-          {navigationItems.map((item) => (
-            <li key={item.href}>
-              <Link className={styles.navigationLink} href={item.href}>
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <div className={styles.actions}>
+        <nav>
+          <ul className={styles.navigation}>
+            {navigationItems.map((item) => (
+              <li key={item.href}>
+                <Link className={styles.navigationLink} href={item.href}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <ThemeToggle />
+      </div>
     </header>
   );
 };

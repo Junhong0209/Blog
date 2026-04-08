@@ -52,6 +52,20 @@ export const navigation = style({
   },
 });
 
+export const actions = style({
+  alignItems: "center",
+  display: "flex",
+  gap: "0.9rem",
+  "@media": {
+    "screen and (max-width: 768px)": {
+      alignItems: "center",
+      flexWrap: "wrap",
+      justifyContent: "space-between",
+      width: "100%",
+    },
+  },
+});
+
 export const navigationLink = style({
   color: vars.color.textMuted,
   display: "inline-flex",
