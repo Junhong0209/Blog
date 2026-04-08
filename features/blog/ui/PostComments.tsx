@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { type ThemeMode } from "@/shared/constants/theme";
 import * as styles from "./PostComments.css";
 
 type PostCommentsProps = {
@@ -14,7 +15,8 @@ const giscusConfig = {
   categoryId: process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID,
   mapping: process.env.NEXT_PUBLIC_GISCUS_MAPPING ?? "specific",
   lang: process.env.NEXT_PUBLIC_GISCUS_LANG ?? "en",
-  theme: process.env.NEXT_PUBLIC_GISCUS_THEME ?? "preferred_color_scheme",
+  themeLight: "noborder_light",
+  themeDark: "noborder_dark",
 };
 
 const hasRequiredGiscusConfig =
@@ -25,6 +27,39 @@ const hasRequiredGiscusConfig =
 
 export const PostComments = ({ slug }: PostCommentsProps) => {
   const commentsContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const getResolvedTheme = useCallback((): ThemeMode => {
+    const currentTheme = document.documentElement.dataset.theme;
+
+    return currentTheme === "dark" ? "dark" : "light";
+  }, []);
+
+  const getGiscusTheme = useCallback((theme: ThemeMode): string => {
+    return theme === "dark" ? giscusConfig.themeDark : giscusConfig.themeLight;
+  }, []);
+
+  const applyGiscusTheme = useCallback(
+    (theme: ThemeMode): void => {
+      const iframe =
+        commentsContainerRef.current?.querySelector<HTMLIFrameElement>("iframe.giscus-frame");
+
+      if (!iframe?.contentWindow) {
+        return;
+      }
+
+      iframe.contentWindow.postMessage(
+        {
+          giscus: {
+            setConfig: {
+              theme: getGiscusTheme(theme),
+            },
+          },
+        },
+        "https://giscus.app",
+      );
+    },
+    [getGiscusTheme],
+  );
 
   useEffect(() => {
     if (!hasRequiredGiscusConfig) {
@@ -55,7 +90,7 @@ export const PostComments = ({ slug }: PostCommentsProps) => {
     script.setAttribute("data-reactions-enabled", "1");
     script.setAttribute("data-emit-metadata", "0");
     script.setAttribute("data-input-position", "top");
-    script.setAttribute("data-theme", giscusConfig.theme);
+    script.setAttribute("data-theme", getGiscusTheme(getResolvedTheme()));
     script.setAttribute("data-lang", giscusConfig.lang);
     script.setAttribute("data-loading", "lazy");
 
@@ -64,7 +99,26 @@ export const PostComments = ({ slug }: PostCommentsProps) => {
     return () => {
       container.innerHTML = "";
     };
-  }, [slug]);
+  }, [getGiscusTheme, getResolvedTheme, slug]);
+
+  useEffect(() => {
+    if (!hasRequiredGiscusConfig) {
+      return;
+    }
+
+    const handleThemeChange = (event: Event) => {
+      const customEvent = event as CustomEvent<{ theme?: ThemeMode }>;
+      const nextTheme = customEvent.detail?.theme === "dark" ? "dark" : "light";
+
+      applyGiscusTheme(nextTheme);
+    };
+
+    window.addEventListener("themechange", handleThemeChange);
+
+    return () => {
+      window.removeEventListener("themechange", handleThemeChange);
+    };
+  }, [applyGiscusTheme]);
 
   return (
     <section className={styles.section} aria-labelledby="comments-heading">

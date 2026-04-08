@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { PageShell } from "@/components/layout/PageShell";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/shared/constants/site";
+import { THEME_STORAGE_KEY } from "@/shared/constants/theme";
 import "pretendard/dist/web/static/pretendard.css";
 import "@/styles/theme.css";
 import "@/styles/global.css";
@@ -34,9 +36,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initializeThemeScript = `
+    (function() {
+      try {
+        var storageKey = "${THEME_STORAGE_KEY}";
+        var storedTheme = window.localStorage.getItem(storageKey);
+        var systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        var theme = storedTheme === "dark" || storedTheme === "light" ? storedTheme : systemTheme;
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (error) {}
+    })();
+  `;
+
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
+        <Script id="theme-initialize" strategy="beforeInteractive">
+          {initializeThemeScript}
+        </Script>
         <PageShell>{children}</PageShell>
       </body>
     </html>
