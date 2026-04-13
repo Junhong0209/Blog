@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Suspense } from "react";
 import { AnalyticsTracker } from "@/components/analytics/AnalyticsTracker";
 import { PageShell } from "@/components/layout/PageShell";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/shared/constants/site";
@@ -79,7 +80,9 @@ export default function RootLayout({
             <Script id="google-analytics" strategy="afterInteractive">
               {initializeAnalyticsScript}
             </Script>
-            <AnalyticsTracker />
+            <Suspense fallback={null}>
+              <AnalyticsTracker />
+            </Suspense>
           </>
         ) : null}
         <PageShell>{children}</PageShell>
