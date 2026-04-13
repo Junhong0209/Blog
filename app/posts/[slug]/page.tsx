@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllPostSlugs, getPostBySlug } from "@/features/blog/lib/posts";
+import { PostViewAnalytics } from "@/features/blog/ui/PostViewAnalytics";
 import { SITE_NAME, SITE_URL } from "@/shared/constants/site";
 import { PostDetailPage } from "@/features/blog/ui/PostDetailPage";
 
@@ -80,6 +81,7 @@ export default async function Page({ params }: PostPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
+      <PostViewAnalytics slug={slug} title={post.title} />
       <PostDetailPage
         content={post.content}
         description={post.description}

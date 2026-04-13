@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PostCard } from "@/features/blog/ui/PostCard";
+import { trackEvent } from "@/shared/lib/analytics";
 import type { PostSummary } from "@/shared/types/post.type";
 import * as styles from "./PostInfiniteList.css";
 
@@ -40,6 +41,7 @@ export const PostInfiniteList = ({
   const isFetchingRef = useRef<boolean>(false);
   const abortControllerRef = useRef<AbortController | null>(null);
   const isFirstRenderRef = useRef<boolean>(true);
+  const lastTrackedQueryRef = useRef<string>("");
 
   const fetchPage = useCallback(
     async ({ nextOffset, searchTerm, replace }: FetchPageParams) => {
@@ -145,6 +147,26 @@ export const PostInfiniteList = ({
       }
     };
   }, []);
+
+  useEffect(() => {
+    const trimmedQuery = query.trim();
+
+    if (trimmedQuery.length < 2 || trimmedQuery === lastTrackedQueryRef.current) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      trackEvent("search_posts", {
+        search_term: trimmedQuery,
+        term_length: trimmedQuery.length,
+      });
+      lastTrackedQueryRef.current = trimmedQuery;
+    }, 700);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [query]);
 
   useEffect(() => {
     const node = sentinelRef.current;
