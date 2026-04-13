@@ -1,5 +1,4 @@
 import { style } from "@vanilla-extract/css";
-import { vars } from "@/styles/theme.css";
 
 export const page = style({
   minHeight: "100vh",
@@ -8,7 +7,7 @@ export const page = style({
 
 export const backgroundAccent = style({
   background:
-    "radial-gradient(circle at top left, rgba(14, 159, 110, 0.14), transparent 28%), radial-gradient(circle at top right, rgba(216, 243, 232, 0.9), transparent 32%)",
+    "radial-gradient(420px 320px at top left, rgba(14, 159, 110, 0.14), transparent 100%), radial-gradient(520px 360px at top right, rgba(216, 243, 232, 0.9), transparent 100%)",
   inset: 0,
   pointerEvents: "none",
   position: "absolute",

@@ -1,6 +1,6 @@
 import { createGlobalTheme } from "@vanilla-extract/css";
 
-export const vars = createGlobalTheme(":root", {
+const lightTheme = {
   color: {
     background: "#f5f1e8",
     surface: "#fbf7f0",
@@ -31,4 +31,26 @@ export const vars = createGlobalTheme(":root", {
     lg: "32px",
     pill: "999px",
   },
-});
+} as const;
+
+const darkTheme = {
+  color: {
+    background: "#111611",
+    surface: "#171d18",
+    surfaceStrong: "#202923",
+    border: "#2f3f35",
+    text: "#e8f2ea",
+    textMuted: "#afc0b3",
+    accent: "#3ddb9f",
+    accentSoft: "#1c3a2f",
+    shadow: "rgba(0, 0, 0, 0.35)",
+  },
+  font: lightTheme.font,
+  space: lightTheme.space,
+  radius: lightTheme.radius,
+} as const;
+
+export const vars = createGlobalTheme(":root", lightTheme);
+
+createGlobalTheme(':root[data-theme="light"]', vars, lightTheme);
+createGlobalTheme(':root[data-theme="dark"]', vars, darkTheme);

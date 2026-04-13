@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 import { compileMDX } from "next-mdx-remote/rsc";
+import rehypePrettyCode from "rehype-pretty-code";
 import { z } from "zod";
 import type { ReactElement } from "react";
 import type { PostFrontmatter, PostSummary } from "@/shared/types/post.type";
@@ -57,14 +58,22 @@ export const getAllPosts = async (): Promise<PostSummary[]> => {
 export const getPaginatedPosts = async (
   offset: number,
   limit: number,
+  query?: string,
 ): Promise<{ posts: PostSummary[]; total: number }> => {
   const safeOffset = Math.max(0, offset);
   const safeLimit = Math.max(1, limit);
   const allPosts = await readAndSortPosts();
+  const normalizedQuery = query?.trim().toLocaleLowerCase() ?? "";
+  const filteredPosts =
+    normalizedQuery.length > 0
+      ? allPosts.filter((post) => {
+          return post.title.toLocaleLowerCase().includes(normalizedQuery);
+        })
+      : allPosts;
 
   return {
-    posts: allPosts.slice(safeOffset, safeOffset + safeLimit),
-    total: allPosts.length,
+    posts: filteredPosts.slice(safeOffset, safeOffset + safeLimit),
+    total: filteredPosts.length,
   };
 };
 
@@ -79,6 +88,16 @@ export const getPostBySlug = async (
       source: content,
       options: {
         parseFrontmatter: false,
+        mdxOptions: {
+          rehypePlugins: [
+            [
+              rehypePrettyCode,
+              {
+                theme: "github-dark",
+              },
+            ],
+          ],
+        },
       },
       components: mdxComponents,
     });
