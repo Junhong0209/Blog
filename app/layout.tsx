@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { AnalyticsTracker } from "@/components/analytics/AnalyticsTracker";
 import { PageShell } from "@/components/layout/PageShell";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/shared/constants/site";
 import { THEME_STORAGE_KEY } from "@/shared/constants/theme";
+import { GA_MEASUREMENT_ID } from "@/shared/lib/analytics";
 import "pretendard/dist/web/static/pretendard.css";
 import "@/styles/theme.css";
 import "@/styles/global.css";
+
+const GOOGLE_SITE_VERIFICATION = process.env.GOOGLE_SITE_VERIFICATION ?? "";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -29,6 +33,11 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     title: SITE_NAME,
   },
+  verification: GOOGLE_SITE_VERIFICATION
+    ? {
+        google: GOOGLE_SITE_VERIFICATION,
+      }
+    : undefined,
 };
 
 export default function RootLayout({
@@ -47,6 +56,13 @@ export default function RootLayout({
       } catch (error) {}
     })();
   `;
+  const initializeAnalyticsScript = `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag("js", new Date());
+    gtag("config", "${GA_MEASUREMENT_ID}", { send_page_view: false });
+  `;
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -54,6 +70,18 @@ export default function RootLayout({
         <Script id="theme-initialize" strategy="beforeInteractive">
           {initializeThemeScript}
         </Script>
+        {GA_MEASUREMENT_ID ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {initializeAnalyticsScript}
+            </Script>
+            <AnalyticsTracker />
+          </>
+        ) : null}
         <PageShell>{children}</PageShell>
       </body>
     </html>
