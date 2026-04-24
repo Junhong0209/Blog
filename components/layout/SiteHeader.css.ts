@@ -71,6 +71,8 @@ export const navigationLink = style({
   display: "inline-flex",
   fontSize: "0.95rem",
   lineHeight: 1.2,
+  justifyContent: "center",
+  alignItems: "center",
   minHeight: "2.25rem",
   padding: "0.35rem 0.2rem",
   textDecoration: "none",
